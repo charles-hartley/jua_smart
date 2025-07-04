@@ -1,23 +1,18 @@
-services:
+    services:
   - type: web
-    name: jua-smart-web
+    name: jua-smart-web # Your web service name
     env: python
-    plan: free
-    # --- START MODIFICATION ---
-    # Change this line: Add the collectstatic command
-    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: gunicorn --worker-tmp-dir /dev/shm juasmart.wsgi:application --bind 0.0.0.0:$PORT
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn --worker-tmp-dir /dev/shm juasmart.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        # Make sure this matches your actual project's settings module (e.g., juasmart.settings)
-        value: juasmart.settings
-      # It's highly recommended to add your SECRET_KEY and DATABASE_URL here
-      # - key: SECRET_KEY
-      #   value: <your-actual-secret-key-from-a-secure-generator>
-      # - key: DATABASE_URL
-      #   value: <your-database-connection-string>
-    # Add this entire new block for static files
-    staticFiles:
-      - path: ./staticfiles  # This matches your STATIC_ROOT in settings.py
-        url: /static/      # This matches your STATIC_URL in settings.py
-    # --- END MODIFICATION ---
+      - key: DATABASE_URL
+        fromDatabase: # Reference your database here, if you have one
+          name: YourDatabaseName # Replace with your actual database name on Render
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 1
+    # staticFiles: <--- THIS BLOCK SHOULD BE GONE
+    #   - path: ./staticfiles
+    #     url: /static/
