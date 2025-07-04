@@ -3,9 +3,21 @@ services:
     name: jua-smart-web
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn your_django_project_name.wsgi:application
+    # --- START MODIFICATION ---
+    # Change this line: Add the collectstatic command
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: gunicorn --worker-tmp-dir /dev/shm juasmart.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: your_django_project_name.settings
-      # Add any other environment variables like DB_URL, SECRET_KEY, etc.
+        # Make sure this matches your actual project's settings module (e.g., juasmart.settings)
+        value: juasmart.settings
+      # It's highly recommended to add your SECRET_KEY and DATABASE_URL here
+      # - key: SECRET_KEY
+      #   value: <your-actual-secret-key-from-a-secure-generator>
+      # - key: DATABASE_URL
+      #   value: <your-database-connection-string>
+    # Add this entire new block for static files
+    staticFiles:
+      - path: ./staticfiles  # This matches your STATIC_ROOT in settings.py
+        url: /static/      # This matches your STATIC_URL in settings.py
+    # --- END MODIFICATION ---
