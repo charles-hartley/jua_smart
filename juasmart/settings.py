@@ -28,8 +28,10 @@ SECRET_KEY = config("SECRET_KEY", default="django-insecure-change-me")
 # DEBUG = config("DEBUG", default=True, cast=bool)
 DEBUG = False
 # ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(",")
-ALLOWED_HOSTS = ['jua-smart.onrender.com', '127.0.0.1', 'localhost']
 
+# ALLOWED_HOSTS = ['jua-smart.onrender.com', '127.0.0.1', 'localhost']
+# Just for testing purposes
+ALLOWED_HOSTS = [*]
 
 # Application definition
 
