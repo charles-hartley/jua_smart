@@ -8,6 +8,4 @@ services:
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: your_django_project_name.settings
-      - key: PYTHON_VERSION
-        value: 3.10.8
       # Add any other environment variables like DB_URL, SECRET_KEY, etc.
