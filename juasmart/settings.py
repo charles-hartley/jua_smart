@@ -31,7 +31,7 @@ DEBUG = False
 
 # ALLOWED_HOSTS = ['jua-smart.onrender.com', '127.0.0.1', 'localhost']
 # Just for testing purposes
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
