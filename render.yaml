@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: jua-smart-web
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn your_django_project_name.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: your_django_project_name.settings
+      - key: PYTHON_VERSION
+        value: 3.10.8
+      # Add any other environment variables like DB_URL, SECRET_KEY, etc.
