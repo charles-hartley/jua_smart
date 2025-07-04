@@ -1,0 +1,821 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - JuaSmart{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding-top: 2rem;
+    }
+
+    .welcome-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 0 0 30px 30px;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dashboard-title {
+        color: #fff;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .dashboard-subtitle {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .quick-stats {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .solar-power-display {
+        text-align: center;
+    }
+
+    .power-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        50% {
+            box-shadow: 0 15px 40px rgba(240, 147, 251, 0.4);
+        }
+        100% {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    .power-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .power-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1;
+    }
+
+    .power-unit {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .power-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+        color: #fff;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1rem;
+    }
+
+    .progress-overview-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        height: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .progress-overview-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .progress-header h4 {
+        color: #fff;
+        margin: 0;
+    }
+
+    .progress-percentage {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .circular-progress {
+        position: relative;
+        margin: 1rem 0;
+    }
+
+    .progress-ring {
+        transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.2);
+        stroke-width: 8;
+    }
+
+    .progress-ring-fill {
+        fill: none;
+        stroke: #f093fb;
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .progress-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .progress-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .progress-label {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .progress-stats {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 1.5rem;
+    }
+
+    .stat {
+        text-align: center;
+    }
+
+    .stat-value {
+        display: block;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .learning-modules {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .module-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .module-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .module-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .module-content {
+        flex: 1;
+    }
+
+    .module-content h5 {
+        color: #fff;
+        margin-bottom: 0.5rem;
+    }
+
+    .module-content p {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .progress-bar-container {
+        position: relative;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+
+    .progress-text {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .module-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .activity-card, .achievements-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        height: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .activity-card:hover, .achievements-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .card-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .card-header h4 {
+        color: #fff;
+        margin: 0;
+    }
+
+    .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .activity-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .activity-icon.completed {
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    }
+
+    .activity-icon.in-progress {
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    }
+
+    .activity-icon.achievement {
+        background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+    }
+
+    .activity-content h6 {
+        color: #fff;
+        margin: 0 0 0.25rem 0;
+        font-size: 0.9rem;
+    }
+
+    .activity-content p {
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+        font-size: 0.8rem;
+    }
+
+    .achievements-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 1rem;
+    }
+
+    .achievement-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .achievement-badge.earned {
+        background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%);
+        color: #fff;
+    }
+
+    .achievement-badge.locked {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .achievement-badge:hover {
+        transform: scale(1.05);
+    }
+
+    .achievement-badge i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .achievement-badge span {
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .quick-actions {
+        margin-top: 2rem;
+    }
+
+    .action-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .action-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.5rem;
+        margin: 0 auto 1rem;
+    }
+
+    .action-card h5 {
+        color: #fff;
+        margin-bottom: 0.5rem;
+    }
+
+    .action-card p {
+        color: rgba(255, 255, 255, 0.8);
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .weather-emoji {
+        animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .dashboard-title {
+            font-size: 2rem;
+        }
+        
+        .quick-stats {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .module-card {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .module-actions {
+            justify-content: center;
+        }
+        
+        .achievements-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Welcome Header -->
+    <div class="welcome-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="dashboard-title">
+                        <i class="fas fa-sun text-warning"></i> 
+                        Karibu, {{ user.first_name|default:"Solar Learner" }}! 
+                        <span class="weather-emoji">🌞</span>
+                    </h1>
+                    <p class="dashboard-subtitle">Continue your journey to solar mastery</p>
+                    
+                    <!-- Quick stats -->
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>Day {{ user.date_joined|timesince|floatformat:0 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-fire"></i>
+                            <span>7 day streak</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>Solar Novice</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <div class="solar-power-display">
+                        <div class="power-circle">
+                            <div class="power-inner">
+                                <span class="power-value">2.4</span>
+                                <span class="power-unit">kW</span>
+                            </div>
+                        </div>
+                        <p class="power-label">Today's Solar Generation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <div class="container">
+        <!-- Progress Overview -->
+        <div class="section-header">
+            <h2><i class="fas fa-chart-line"></i> Your Progress</h2>
+            <p>Track your learning journey across different solar topics</p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <!-- Overall Progress Card -->
+            <div class="col-lg-4">
+                <div class="progress-overview-card">
+                    <div class="progress-header">
+                        <h4>Overall Progress</h4>
+                        <span class="progress-percentage">52%</span>
+                    </div>
+                    <div class="circular-progress">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="progress-ring-fill" cx="60" cy="60" r="50" style="stroke-dasharray: 314; stroke-dashoffset: 151;"></circle>
+                        </svg>
+                        <div class="progress-center">
+                            <span class="progress-value">52%</span>
+                            <span class="progress-label">Complete</span>
+                        </div>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="stat">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Lessons</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">15</span>
+                            <span class="stat-label">Quizzes</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">240</span>
+                            <span class="stat-label">XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Modules -->
+            <div class="col-lg-8">
+                <div class="learning-modules">
+                    <div class="module-card">
+                        <div class="module-icon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="module-content">
+                            <h5>Solar Basics</h5>
+                            <p>Understanding photovoltaic systems and solar energy fundamentals</p>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 75%"></div>
+                            </div>
+                            <span class="progress-text">75% Complete</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="{% url 'lesson' %}" class="btn btn-primary">
+                                <i class="fas fa-play"></i> Continue
+                            </a>
+                            <button class="btn btn-outline-light" onclick="openChatbot()">
+                                <i class="fas fa-robot"></i> Ask AI
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-icon">
+                            <i class="fas fa-battery-half"></i>
+                        </div>
+                        <div class="module-content">
+                            <h5>Energy Storage</h5>
+                            <p>Battery systems, inverters, and energy management</p>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 30%"></div>
+                            </div>
+                            <span class="progress-text">30% Complete</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="{% url 'lesson' %}" class="btn btn-primary">
+                                <i class="fas fa-play"></i> Continue
+                            </a>
+                            <button class="btn btn-outline-light" onclick="openChatbot()">
+                                <i class="fas fa-robot"></i> Ask AI
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="module-card">
+                        <div class="module-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="module-content">
+                            <h5>Home Solar Systems</h5>
+                            <p>Residential installation, maintenance, and optimization</p>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">Not Started</span>
+                        </div>
+                        <div class="module-actions">
+                            <a href="{% url 'lesson' %}" class="btn btn-primary">
+                                <i class="fas fa-play"></i> Start
+                            </a>
+                            <button class="btn btn-outline-light" onclick="openChatbot()">
+                                <i class="fas fa-robot"></i> Ask AI
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity & Achievements -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="activity-card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-clock"></i> Recent Activity</h4>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h6>Completed "Solar Panel Types" quiz</h6>
+                                <p>Scored 85% • 2 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon in-progress">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h6>Started "Energy Conversion" lesson</h6>
+                                <p>45% complete • 1 day ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon achievement">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h6>Earned "First Quiz" badge</h6>
+                                <p>Completed your first quiz • 2 days ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="achievements-card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-award"></i> Achievements</h4>
+                    </div>
+                    <div class="achievements-grid">
+                        <div class="achievement-badge earned">
+                            <i class="fas fa-star"></i>
+                            <span>First Steps</span>
+                        </div>
+                        <div class="achievement-badge earned">
+                            <i class="fas fa-book"></i>
+                            <span>Quick Learner</span>
+                        </div>
+                        <div class="achievement-badge earned">
+                            <i class="fas fa-brain"></i>
+                            <span>Quiz Master</span>
+                        </div>
+                        <div class="achievement-badge locked">
+                            <i class="fas fa-fire"></i>
+                            <span>Week Streak</span>
+                        </div>
+                        <div class="achievement-badge locked">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Solar Expert</span>
+                        </div>
+                        <div class="achievement-badge locked">
+                            <i class="fas fa-crown"></i>
+                            <span>Champion</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="section-header">
+                <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-3 col-md-6">
+                    <a href="{% url 'lesson' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <h5>Resume Learning</h5>
+                        <p>Continue where you left off</p>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <a href="{% url 'quiz' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <h5>Take Quiz</h5>
+                        <p>Test your knowledge</p>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <button class="action-card" onclick="openChatbot()">
+                        <div class="action-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h5>Ask JuaBot</h5>
+                        <p>Get instant help</p>
+                    </button>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <a href="{% url 'calculator' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h5>Solar Calculator</h5>
+                        <p>Estimate your needs</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Dashboard specific initialization
+        console.log('Dashboard loaded for user: {{ user.username }}');
+        
+        // Animate progress bars on load
+        const progressBars = document.querySelectorAll('.progress-bar');
+        progressBars.forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            setTimeout(() => {
+                bar.style.width = width;
+            }, 500);
+        });
+        
+        // Animate circular progress
+        const circularProgress = document.querySelector('.progress-ring-fill');
+        if (circularProgress) {
+            const currentOffset = circularProgress.style.strokeDashoffset;
+            circularProgress.style.strokeDashoffset = '314';
+            setTimeout(() => {
+                circularProgress.style.strokeDashoffset = currentOffset;
+            }, 1000);
+        }
+    });
+
+    // Function to open chatbot (to be implemented)
+    function openChatbot() {
+        // Implement chatbot opening logic
+        console.log('Opening chatbot...');
+        // This could trigger a modal, redirect, or open a chat widget
+    }
+</script>
+{% endblock %}

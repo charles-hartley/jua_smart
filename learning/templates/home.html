@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}JuaSmart - Learn Solar, Power Kenya{% endblock %}
+
+{% block content %}
+<div id="home" class="page active">
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Learn Solar.<br>Power Kenya.</h1>
+            <p class="hero-subtitle">Join JuaSmart today and become part of Kenya's renewable energy revolution. Learn, quiz, and get AI-powered assistance.</p>
+            <div class="hero-buttons">
+                <a href="{% url 'dashboard' %}" class="btn-hero primary">
+                    <i class="fas fa-rocket"></i> Get Started
+                </a>
+                <a href="{% url 'login' %}" class="btn-hero secondary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Why Choose JuaSmart?</h2>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6 fade-in">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h4 class="feature-title">Learn</h4>
+                        <p class="feature-text">Comprehensive solar energy courses designed for Kenyan context</p>
+                        <a href="{% url 'lesson' %}" class="btn btn-outline-primary">Start Learning</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 fade-in">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clipboard-question"></i>
+                        </div>
+                        <h4 class="feature-title">Quiz</h4>
+                        <p class="feature-text">Test your knowledge with interactive quizzes and assessments</p>
+                        <a href="{% url 'quiz' %}" class="btn btn-outline-primary">Take Quiz</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 fade-in">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h4 class="feature-title">Ask AI</h4>
+                        <p class="feature-text">Get instant answers from our AI-powered JuaBot assistant</p>
+                        <a href="#" class="btn btn-outline-primary" onclick="openChatbot()">Chat Now</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 fade-in">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h4 class="feature-title">Save Kenya</h4>
+                        <p class="feature-text">Contribute to Kenya's sustainable energy future</p>
+                        <a href="{% url 'save' %}" class="btn btn-outline-primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        observeElements();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% load static %}
+
+
+
+{% block content %}
+<!-- ✅ Bootstrap-native trigger: no JS function needed
+<button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#chatbotModal">
+    <i class="fas fa-robot"></i> Ask JuaBot
+</button> -->
+
+<!-- ✅ Modal HTML -->
+<div class="modal fade" id="chatbotModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="chat-header p-3 bg-primary text-white d-flex justify-content-between">
+                <h5 class="mb-0"><i class="fas fa-robot"></i> JuaBot Assistant</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="chatHistory" class="chat-body p-3" style="height: 300px; overflow-y: auto;">
+                    <div class="chat-message bot mb-2">
+                        <strong>JuaBot:</strong> Habari! I'm JuaBot, your solar energy assistant. Ask me anything about solar power or Kenya’s green future! 🌞
+                    </div>
+                </div>
+                <div class="p-3 border-top">
+                    <div class="input-group">
+                        <input type="text" id="chatInput" class="form-control" placeholder="Ask something..." autocomplete="off">
+                        <button class="btn btn-primary" onclick="sendChat()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <small class="text-muted mt-2 d-block">
+                        Try asking: "How does solar power work?", "Cost of solar panels?", "Benefits for Kenya?"
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ✅ Safe global state
+let chatSessionId = null;
+
+// ✅ Safe function to send chat message
+function sendChat() {
+    const input = document.getElementById("chatInput");
+    const message = input?.value.trim();
+    if (!message) return;
+
+    appendMessage('user', message);
+    input.value = '';
+    showTypingIndicator();
+
+    fetch("/api/chatbot/", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            message: message,
+            session_id: chatSessionId
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        hideTypingIndicator();
+        if (data.error) {
+            appendMessage('bot', `Oops! ${data.error}`);
+        } else {
+            appendMessage('bot', data.response);
+            chatSessionId = data.session_id;
+        }
+    })
+    .catch(() => {
+        hideTypingIndicator();
+        appendMessage('bot', "Something went wrong. Please try again.");
+    });
+}
+
+// ✅ Message handling helpers
+function appendMessage(sender, message) {
+    const chatHistory = document.getElementById("chatHistory");
+    if (!chatHistory) return;
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-message ${sender} mb-2`;
+    msgDiv.innerHTML = `<strong>${sender === 'user' ? 'You' : 'JuaBot'}:</strong> ${message}`;
+    chatHistory.appendChild(msgDiv);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+function showTypingIndicator() {
+    appendMessage('bot', '<em>JuaBot is typing...</em>');
+}
+
+function hideTypingIndicator() {
+    const chatHistory = document.getElementById("chatHistory");
+    const lastMsg = chatHistory?.lastElementChild;
+    if (lastMsg && lastMsg.innerHTML.includes('typing')) {
+        chatHistory.removeChild(lastMsg);
+    }
+}
+
+function getCookie(name) {
+    const cookies = document.cookie?.split(';') || [];
+    for (let cookie of cookies) {
+        const trimmed = cookie.trim();
+        if (trimmed.startsWith(name + '=')) {
+            return decodeURIComponent(trimmed.substring(name.length + 1));
+        }
+    }
+    return null;
+}
+
+// ✅ Enter key sends message
+document.addEventListener("DOMContentLoaded", function() {
+    const input = document.getElementById("chatInput");
+    if (input) {
+        input.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") sendChat();
+        });
+    }
+});
+
+// ✅ Make available globally just in case
+window.sendChat = sendChat;
+</script>
+{% endblock %}
