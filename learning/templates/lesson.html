@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Solar Basics - JuaSmart{% endblock %}
+{% block title %}Solar Lessons - JuaSmart{% endblock %}
 
 {% block navbar %}
 <nav class="dashboard-nav">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="text-white mb-0"><i class="fas fa-book-open"></i> Solar Basics</h4>
+            <h4 class="text-white mb-0"><i class="fas fa-book-open"></i> Solar Lessons</h4>
             <a href="{% url 'dashboard' %}" class="btn btn-outline-light">
                 <i class="fas fa-arrow-left"></i> Back to Dashboard
             </a>
@@ -19,58 +19,38 @@
 <div id="lesson" class="page active">
     <div class="container mt-4">
         <div class="lesson-content">
-            <h2 class="mb-4">
-                <i class="fas fa-sun text-warning"></i> Lesson: Solar Basics
-            </h2>
-            
-            <div class="row">
+
+            <!-- Lesson 1 -->
+            <h2 class="mb-4"><i class="fas fa-sun text-warning"></i> Lesson 1: Solar Basics</h2>
+            <div class="row mb-5">
                 <div class="col-lg-8">
-                    <p class="lead">Solar energy is derived from sunlight and is one of the most abundant renewable energy sources available to us. In Kenya, we are blessed with abundant sunshine throughout the year, making solar energy an ideal solution for our energy needs.</p>
-                    
+                    <p class="lead">Solar energy is derived from sunlight and is one of the most abundant renewable resources available. Kenya, with its year-round sunshine, is uniquely positioned to lead in solar power adoption and innovation.</p>
+                    <p>Solar energy can be harnessed using photovoltaic (PV) panels that convert sunlight into electricity. This clean, renewable energy reduces dependence on fossil fuels, lowers utility bills, and contributes to environmental protection.</p>
                     <img src="https://images.pexels.com/photos/8853502/pexels-photo-8853502.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
                          alt="Solar panels in Kenya" class="img-fluid lesson-image">
-                    
-                    <h3 class="mt-4 mb-3">
-                        <i class="fas fa-lightbulb text-warning"></i> Key Concepts
-                    </h3>
+                    <h4 class="mt-4 mb-3">Key Concepts</h4>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="concept-card mb-3 p-3 bg-light rounded">
                                 <h5><i class="fas fa-sun text-warning"></i> Solar Energy</h5>
-                                <p>Energy harnessed from the sun's radiation, converted into electricity or heat.</p>
+                                <p>Energy produced from sunlight, converted into electricity or heat through solar technologies.</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="concept-card mb-3 p-3 bg-light rounded">
                                 <h5><i class="fas fa-solar-panel text-primary"></i> Solar Panels</h5>
-                                <p>Devices that convert sunlight directly into electricity using photovoltaic cells.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="concept-card mb-3 p-3 bg-light rounded">
-                                <h5><i class="fas fa-money-bill-wave text-success"></i> Cost Savings</h5>
-                                <p>Solar systems reduce electricity bills and provide long-term energy savings.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="concept-card mb-3 p-3 bg-light rounded">
-                                <h5><i class="fas fa-leaf text-success"></i> Environmental Benefits</h5>
-                                <p>Clean energy source that reduces carbon emissions and environmental impact.</p>
+                                <p>Devices made up of photovoltaic cells that directly convert sunlight into electricity.</p>
                             </div>
                         </div>
                     </div>
-                    
-                    <h3 class="mt-4 mb-3">
-                        <i class="fas fa-map-marked-alt text-info"></i> Solar in Kenya
-                    </h3>
-                    <p>Kenya receives an average of 4-6 kWh/m² of solar radiation daily, making it one of the best countries in the world for solar energy development. This abundant resource can:</p>
+                    <h5 class="mt-4 mb-3">Why Kenya?</h5>
                     <ul class="list-unstyled">
-                        <li><i class="fas fa-check text-success"></i> Power rural communities without grid access</li>
-                        <li><i class="fas fa-check text-success"></i> Reduce dependence on expensive fossil fuels</li>
-                        <li><i class="fas fa-check text-success"></i> Create jobs in the renewable energy sector</li>
-                        <li><i class="fas fa-check text-success"></i> Support Kenya's Vision 2030 development goals</li>
+                        <li><i class="fas fa-check text-success"></i> Consistent 4-6 kWh/m² solar radiation daily.</li>
+                        <li><i class="fas fa-check text-success"></i> Ideal for off-grid homes, schools, and clinics.</li>
+                        <li><i class="fas fa-check text-success"></i> Supports Vision 2030 sustainable energy goals.</li>
                     </ul>
                 </div>
+
                 <div class="col-lg-4">
                     <div class="lesson-sidebar p-4 bg-light rounded">
                         <h5 class="mb-3"><i class="fas fa-info-circle"></i> Lesson Info</h5>
@@ -81,16 +61,53 @@
                             <div class="progress-bar" style="width: 75%"></div>
                         </div>
                         <hr>
-                        <h6>Next Steps:</h6>
-                        <a href="{% url 'quiz' %}" class="btn btn-success w-100 mb-2">
-                            <i class="fas fa-quiz"></i> Take Quiz
-                        </a>
+                        <h6>Quick Actions:</h6>
                         <button class="btn btn-outline-primary w-100" onclick="openChatbot()">
                             <i class="fas fa-robot"></i> Ask JuaBot
                         </button>
                     </div>
                 </div>
             </div>
+
+            <!-- Lesson 2 -->
+            <h2 class="mb-4"><i class="fas fa-battery-full text-success"></i> Lesson 2: Energy Storage</h2>
+            <div class="mb-5">
+                <p class="lead">Solar energy is not always available when needed. Energy storage systems allow excess solar power generated during the day to be stored for use at night or during cloudy periods.</p>
+                <p>Efficient storage is essential for reliable power supply in off-grid homes and businesses, ensuring that clean energy remains accessible 24/7.</p>
+                <img src="https://images.pexels.com/photos/3405769/pexels-photo-3405769.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                     alt="Battery storage systems" class="img-fluid mb-3 rounded">
+                <h5 class="mt-3 mb-2">Common Storage Technologies</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success"></i> Lead-acid Batteries: Affordable, widely used in small systems.</li>
+                    <li><i class="fas fa-check text-success"></i> Lithium-ion Batteries: Longer lifespan, more compact, ideal for modern homes and businesses.</li>
+                </ul>
+                <p class="mt-3">With proper storage, households can power essential devices like lights, phone chargers, and TVs even when the sun isn’t shining.</p>
+            </div>
+
+            <!-- Lesson 3 -->
+            <h2 class="mb-4"><i class="fas fa-home text-primary"></i> Lesson 3: Home Solar Systems</h2>
+            <div class="mb-5">
+                <p class="lead">Home solar systems provide an independent, renewable source of power, especially in rural or remote areas with limited grid access.</p>
+                <p>These systems can be designed to meet basic lighting needs or scaled to power entire households including fridges, TVs, internet routers, and security systems.</p>
+                <img src="https://images.pexels.com/photos/1154491/pexels-photo-1154491.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                     alt="Home solar system installation" class="img-fluid mb-3 rounded">
+                <h5 class="mt-3 mb-2">Typical Components</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-solar-panel text-warning"></i> Solar Panels: Capture sunlight and convert it to electricity.</li>
+                    <li><i class="fas fa-battery-full text-success"></i> Battery Bank: Stores excess power for later use.</li>
+                    <li><i class="fas fa-plug text-primary"></i> Inverter: Converts DC (from panels) to AC power for home use.</li>
+                    <li><i class="fas fa-cogs text-danger"></i> Charge Controller: Regulates charging to protect the batteries.</li>
+                </ul>
+                <p class="mt-3">Solar systems empower homes to reduce reliance on costly grid power and improve energy security sustainably.</p>
+            </div>
+
+            <!-- Quiz Call to Action -->
+            <div class="text-center my-5">
+                <a href="{% url 'quiz' %}" class="btn btn-lg btn-success">
+                    <i class="fas fa-clipboard-question"></i> Take the Solar Quiz
+                </a>
+            </div>
+
         </div>
     </div>
 </div>

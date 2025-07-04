@@ -9,8 +9,12 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('lesson/', views.lesson, name='lesson'),
     path('quiz/', views.quiz, name='quiz'),
+    path('quiz/solar_basics/', views.quiz_solar_basics, name='quiz_solar_basics'),
+    path('quiz/energy_storage/', views.quiz_energy_storage, name='quiz_energy_storage'),
+    path('quiz/home_solar_systems/', views.quiz_home_systems, name='quiz_home_systems'),
     path('save/', views.save_kenya, name='save'),
     path('calculator/', views.calculator, name='calculator'),
+    path('save/', views.save_kenya, name='save'),
 
     path('api/courses/', views.CourseListView.as_view(), name='api_course_list'),
     path('api/courses/<uuid:pk>/', views.CourseDetailView.as_view(), name='api_course_detail'),

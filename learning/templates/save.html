@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Save Kenya - JuaSmart{% endblock %}
+
+{% block content %}
+<nav class="dashboard-nav">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="text-white mb-0"><i class="fas fa-leaf"></i> Save Kenya</h4>
+            <a href="{% url 'home' %}" class="btn btn-outline-light">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-4">🌍 Save Kenya Through Solar Energy</h1>
+        <p class="lead">Join the movement to make Kenya greener and more sustainable through renewable energy!</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-lg border-0">
+                <div class="card-body p-4">
+                    <h4 class="text-primary mb-3"><i class="fas fa-question-circle"></i> Why Save Kenya?</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Reduce carbon emissions and fight climate change</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Promote clean and renewable energy sources</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Empower communities with affordable solar solutions</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Protect Kenya's natural beauty for future generations</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Create sustainable jobs in the green economy</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-lg border-0">
+                <div class="card-body p-4">
+                    <h4 class="text-success mb-3"><i class="fas fa-hands-helping"></i> How You Can Help</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i> Learn about solar energy and share your knowledge</li>
+                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i> Participate in local environmental initiatives</li>
+                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i> Encourage others to adopt solar power</li>
+                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i> Volunteer for community solar projects</li>
+                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i> Advocate for renewable energy policies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <div class="row g-3 justify-content-center">
+            <div class="col-auto">
+                <a href="{% url 'lesson' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-play"></i> Start Learning
+                </a>
+            </div>
+            <div class="col-auto">
+                <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                </a>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-secondary btn-lg" onclick="openChatbot()">
+                    <i class="fas fa-robot"></i> Ask JuaBot
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,8 +3,11 @@ console.log('JavaScript file loaded successfully');
 // Make sure openChatbot is defined at the global scope
 function openChatbot() {
     console.log('openChatbot function called');
-    const modal = new bootstrap.Modal(document.getElementById('chatbotModal'));
-    modal.show();
+    const modal = document.getElementById('chatbotModal');
+    if (modal) {
+        const bootstrapModal = new bootstrap.Modal(modal);
+        bootstrapModal.show();
+    }
 }
 
 // to make sure the function is available globally
@@ -23,21 +26,26 @@ let quizAnswers = {
 
 // Page Navigation
 function showPage(pageId) {
-    // Hide all pages
+    // Hide all pages - but only if they exist
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
     });
     
-    // Show selected page
-    document.getElementById(pageId).classList.add('active');
-    currentPage = pageId;
+    // Show selected page - but only if it exists
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        currentPage = pageId;
+    }
     
-    // Show/hide navbar based on page
+    // Show/hide navbar based on page - but only if navbar exists
     const navbar = document.getElementById('navbar');
-    if (pageId === 'home') {
-        navbar.classList.add('d-none');
-    } else {
-        navbar.classList.remove('d-none');
+    if (navbar) {
+        if (pageId === 'home') {
+            navbar.classList.add('d-none');
+        } else {
+            navbar.classList.remove('d-none');
+        }
     }
     
     // Scroll to top
@@ -92,15 +100,23 @@ function initializeQuiz() {
         });
     });
 
-    // Handle form submission
-    document.getElementById('quizForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        submitQuiz();
-    });
+    // Handle form submission - but only if form exists
+    const quizForm = document.getElementById('quizForm');
+    if (quizForm) {
+        quizForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitQuiz();
+        });
+    }
 }
 
 function submitQuiz() {
-    const formData = new FormData(document.getElementById('quizForm'));
+    const quizForm = document.getElementById('quizForm');
+    const quizResult = document.getElementById('quizResult');
+    
+    if (!quizForm || !quizResult) return;
+    
+    const formData = new FormData(quizForm);
     let score = 0;
     let totalQuestions = Object.keys(quizAnswers).length;
     
@@ -112,73 +128,126 @@ function submitQuiz() {
     }
     
     // Show result
-    document.getElementById('quizForm').style.display = 'none';
-    document.getElementById('quizResult').style.display = 'block';
+    quizForm.style.display = 'none';
+    quizResult.style.display = 'block';
     
-    // Update score text
+    // Update score text - but only if element exists
     const scoreText = document.getElementById('scoreText');
-    const percentage = Math.round((score / totalQuestions) * 100);
-    
-    if (percentage >= 80) {
-        scoreText.innerHTML = `You scored ${score}/${totalQuestions} (${percentage}%) - Excellent work! 🏆`;
-    } else if (percentage >= 60) {
-        scoreText.innerHTML = `You scored ${score}/${totalQuestions} (${percentage}%) - Good job! 👍`;
-    } else {
-        scoreText.innerHTML = `You scored ${score}/${totalQuestions} (${percentage}%) - Keep learning! 📚`;
+    if (scoreText) {
+        const percentage = Math.round((score / totalQuestions) * 100);
+        
+        if (percentage >= 80) {
+            scoreText.innerHTML = `You scored ${score}/${totalQuestions} (${percentage}%) - Excellent work! 🏆`;
+        } else if (percentage >= 60) {
+            scoreText.innerHTML = `You scored ${score}/${totalQuestions} (${percentage}%) - Good job! 👍`;
+        } else {
+            scoreText.innerHTML = `You scored ${score}/${totalQuestions} (${percentage}%) - Keep learning! 📚`;
+        }
     }
 }
 
 function retakeQuiz() {
-    document.getElementById('quizForm').style.display = 'block';
-    document.getElementById('quizResult').style.display = 'none';
+    const quizForm = document.getElementById('quizForm');
+    const quizResult = document.getElementById('quizResult');
+    
+    if (!quizForm || !quizResult) return;
+    
+    quizForm.style.display = 'block';
+    quizResult.style.display = 'none';
     
     // Reset form
-    document.getElementById('quizForm').reset();
+    quizForm.reset();
     document.querySelectorAll('.quiz-option').forEach(option => {
         option.classList.remove('selected');
     });
 }
 
-// Form Handling
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    // Simulate login
-    setTimeout(() => {
-        alert('Login successful! Welcome to JuaSmart!');
-        showPage('dashboard');
-    }, 1000);
-});
-
-document.getElementById('registerForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    // Simulate registration
-    setTimeout(() => {
-        alert('Registration successful! Welcome to JuaSmart!');
-        showPage('dashboard');
-    }, 1000);
-});
-
-// Chat input enter key
-document.getElementById('chatInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        sendMessage();
+// Form Handling - with proper DOM checks
+function initializeForms() {
+    // Login form
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simulate login
+            setTimeout(() => {
+                alert('Login successful! Welcome to JuaSmart!');
+                showPage('dashboard');
+            }, 1000);
+        });
     }
-});
+
+    // Register form
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            // Let Django handle form submission normally
+        });
+    }
+
+    // Chat input enter key
+    const chatInput = document.getElementById('chatInput');
+    if (chatInput) {
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
+}
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
-    showPage('home');
+    console.log('DOM Content Loaded');
+    
+    // Check if we're on a single-page app or a separate page
+    const homePageExists = document.getElementById('home');
+    
+    if (homePageExists) {
+        // We're on the main single-page app
+        showPage('home');
+    } else {
+        // We're on a separate page (like dashboard.html)
+        console.log('On separate page - skipping SPA initialization');
+    }
+    
+    // Initialize forms regardless of page type
+    initializeForms();
 });
 
 // Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
 });
+
+// Function to send chat messages (if needed)
+function sendMessage() {
+    const chatInput = document.getElementById('chatInput');
+    if (!chatInput) return;
+    
+    const message = chatInput.value.trim();
+    if (message === '') return;
+    
+    // Add message to chat history
+    chatHistory.push({
+        user: 'You',
+        message: message,
+        timestamp: new Date()
+    });
+    
+    // Clear input
+    chatInput.value = '';
+    
+    // Here you would typically send the message to your backend
+    console.log('Message sent:', message);
+}

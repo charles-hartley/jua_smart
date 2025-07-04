@@ -1,137 +1,118 @@
 {% extends 'base.html' %}
 
-{% block title %}Solar Basics Quiz - JuaSmart{% endblock %}
+{% block title %}JuaSmart - Solar Lessons Quiz{% endblock %}
 
 {% block navbar %}
 <nav class="dashboard-nav">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="text-white mb-0"><i class="fas fa-brain"></i> Solar Basics Quiz</h4>
-            <a href="{% url 'solar_basics' %}" class="btn btn-outline-light">
-                <i class="fas fa-arrow-left"></i> Back to Lesson
-            </a>
-        </div>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="text-white mb-0"><i class="fas fa-brain"></i> Solar Lessons Quiz</h4>
+      <a href="{% url 'solar_lessons' %}" class="btn btn-outline-light">
+        <i class="fas fa-arrow-left"></i> Back to Lessons
+      </a>
     </div>
+  </div>
 </nav>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="quiz-container">
-                <div class="text-center mb-4">
-                    <h2><i class="fas fa-brain text-primary"></i> Test Your Knowledge</h2>
-                    <p class="lead">Answer these questions to check your understanding of solar basics.</p>
-                </div>
 
-                <form id="quizForm">
-                    {% csrf_token %}
-                    
-                    <div class="quiz-question">
-                        <h5><i class="fas fa-question-circle"></i> 1. What is solar energy?</h5>
-                        <div class="quiz-option" data-question="1" data-answer="a">
-                            <input type="radio" name="q1" value="a" id="q1a">
-                            <label for="q1a">Energy derived from wind power</label>
-                        </div>
-                        <div class="quiz-option" data-question="1" data-answer="b">
-                            <input type="radio" name="q1" value="b" id="q1b">
-                            <label for="q1b">Energy harnessed from sunlight</label>
-                        </div>
-                        <div class="quiz-option" data-question="1" data-answer="c">
-                            <input type="radio" name="q1" value="c" id="q1c">
-                            <label for="q1c">Energy from hydroelectric power</label>
-                        </div>
-                    </div>
+  <div class="text-center mb-5">
+    <h2><i class="fas fa-clipboard-list text-primary"></i> Complete Solar Knowledge Check</h2>
+    <p class="lead">Test yourself on all 3 lessons: Solar Basics, Energy Storage & Home Solar Systems.</p>
+  </div>
 
-                    <div class="quiz-question">
-                        <h5><i class="fas fa-question-circle"></i> 2. How does solar energy benefit Kenya?</h5>
-                        <div class="quiz-option" data-question="2" data-answer="a">
-                            <input type="radio" name="q2" value="a" id="q2a">
-                            <label for="q2a">Reduces electricity costs and provides clean energy</label>
-                        </div>
-                        <div class="quiz-option" data-question="2" data-answer="b">
-                            <input type="radio" name="q2" value="b" id="q2b">
-                            <label for="q2b">Increases pollution levels</label>
-                        </div>
-                        <div class="quiz-option" data-question="2" data-answer="c">
-                            <input type="radio" name="q2" value="c" id="q2c">
-                            <label for="q2c">Decreases employment opportunities</label>
-                        </div>
-                    </div>
+  <!-- Quick Nav -->
+  <div class="text-center mb-4">
+    <a href="#quiz-basics" class="btn btn-outline-primary me-2">Solar Basics</a>
+    <a href="#quiz-storage" class="btn btn-outline-success me-2">Energy Storage</a>
+    <a href="#quiz-home" class="btn btn-outline-warning">Home Solar Systems</a>
+  </div>
 
-                    <div class="quiz-question">
-                        <h5><i class="fas fa-question-circle"></i> 3. What is a solar panel?</h5>
-                        <div class="quiz-option" data-question="3" data-answer="a">
-                            <input type="radio" name="q3" value="a" id="q3a">
-                            <label for="q3a">A device that converts sunlight into electricity</label>
-                        </div>
-                        <div class="quiz-option" data-question="3" data-answer="b">
-                            <input type="radio" name="q3" value="b" id="q3b">
-                            <label for="q3b">A type of battery storage system</label>
-                        </div>
-                        <div class="quiz-option" data-question="3" data-answer="c">
-                            <input type="radio" name="q3" value="c" id="q3c">
-                            <label for="q3c">A wind turbine component</label>
-                        </div>
-                    </div>
+  <form id="quizForm">
+    {% csrf_token %}
 
-                    <div class="quiz-question">
-                        <h5><i class="fas fa-question-circle"></i> 4. What is the main component of a solar panel?</h5>
-                        <div class="quiz-option" data-question="4" data-answer="a">
-                            <input type="radio" name="q4" value="a" id="q4a">
-                            <label for="q4a">Photovoltaic cells (Silicon cells)</label>
-                        </div>
-                        <div class="quiz-option" data-question="4" data-answer="b">
-                            <input type="radio" name="q4" value="b" id="q4b">
-                            <label for="q4b">Iron plates</label>
-                        </div>
-                        <div class="quiz-option" data-question="4" data-answer="c">
-                            <input type="radio" name="q4" value="c" id="q4c">
-                            <label for="q4c">Copper wires only</label>
-                        </div>
-                    </div>
+    <!-- Quiz 1: Solar Basics -->
+    <div id="quiz-basics" class="mb-5">
+      <h3 class="mb-3"><i class="fas fa-sun text-warning"></i> Solar Basics</h3>
 
-                    <div class="quiz-question">
-                        <h5><i class="fas fa-question-circle"></i> 5. How can solar energy help rural communities in Kenya?</h5>
-                        <div class="quiz-option" data-question="5" data-answer="a">
-                            <input type="radio" name="q5" value="a" id="q5a">
-                            <label for="q5a">By providing reliable electricity access</label>
-                        </div>
-                        <div class="quiz-option" data-question="5" data-answer="b">
-                            <input type="radio" name="q5" value="b" id="q5b">
-                            <label for="q5b">By increasing traffic congestion</label>
-                        </div>
-                        <div class="quiz-option" data-question="5" data-answer="c">
-                            <input type="radio" name="q5" value="c" id="q5c">
-                            <label for="q5c">By reducing water supply</label>
-                        </div>
-                    </div>
+      <div class="quiz-question">
+        <h5>1. What is solar energy?</h5>
+        <div><input type="radio" name="q1" value="a"> Energy from wind power</div>
+        <div><input type="radio" name="q1" value="b"> Energy harnessed from sunlight</div>
+        <div><input type="radio" name="q1" value="c"> Energy from hydroelectric power</div>
+      </div>
 
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-check"></i> Submit Quiz
-                        </button>
-                    </div>
-                </form>
-
-                <div id="quizResult" class="text-center mt-4" style="display: none;">
-                    <div class="alert alert-success">
-                        <h4><i class="fas fa-trophy"></i> Quiz Completed!</h4>
-                        <p id="scoreText">You scored 4/5 - Excellent work!</p>
-                        <div class="mt-3">
-                            <button class="btn btn-outline-primary me-2" onclick="retakeQuiz()">
-                                <i class="fas fa-redo"></i> Retake Quiz
-                            </button>
-                            <a href="{% url 'dashboard' %}" class="btn btn-success">
-                                <i class="fas fa-arrow-right"></i> Continue Learning
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div class="quiz-question">
+        <h5>2. How does solar energy benefit Kenya?</h5>
+        <div><input type="radio" name="q2" value="a"> Reduces electricity costs and provides clean energy</div>
+        <div><input type="radio" name="q2" value="b"> Increases pollution</div>
+        <div><input type="radio" name="q2" value="c"> Decreases jobs</div>
+      </div>
     </div>
+
+    <!-- Quiz 2: Energy Storage -->
+    <div id="quiz-storage" class="mb-5">
+      <h3 class="mb-3"><i class="fas fa-battery-full text-success"></i> Energy Storage</h3>
+
+      <div class="quiz-question">
+        <h5>3. Why is energy storage important for solar systems?</h5>
+        <div><input type="radio" name="q3" value="a"> To store excess energy for later use</div>
+        <div><input type="radio" name="q3" value="b"> To waste power</div>
+        <div><input type="radio" name="q3" value="c"> To connect to grid at night</div>
+      </div>
+
+      <div class="quiz-question">
+        <h5>4. Which is a common type of solar storage battery?</h5>
+        <div><input type="radio" name="q4" value="a"> Gasoline-powered generator</div>
+        <div><input type="radio" name="q4" value="b"> Lead-acid battery</div>
+        <div><input type="radio" name="q4" value="c"> Electric kettle</div>
+      </div>
+    </div>
+
+    <!-- Quiz 3: Home Solar Systems -->
+    <div id="quiz-home" class="mb-5">
+      <h3 class="mb-3"><i class="fas fa-home text-primary"></i> Home Solar Systems</h3>
+
+      <div class="quiz-question">
+        <h5>5. What does an inverter do in a solar system?</h5>
+        <div><input type="radio" name="q5" value="a"> Converts DC to AC for appliances</div>
+        <div><input type="radio" name="q5" value="b"> Stores water</div>
+        <div><input type="radio" name="q5" value="c"> Increases electricity bills</div>
+      </div>
+
+      <div class="quiz-question">
+        <h5>6. Which of these is part of a home solar system?</h5>
+        <div><input type="radio" name="q6" value="a"> Solar panels</div>
+        <div><input type="radio" name="q6" value="b"> Gas stove</div>
+        <div><input type="radio" name="q6" value="c"> Coal burner</div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary btn-lg">
+        <i class="fas fa-check"></i> Submit All Quizzes
+      </button>
+    </div>
+
+  </form>
+
+  <div id="quizResult" class="text-center mt-4" style="display:none;">
+    <div class="alert alert-success">
+      <h4><i class="fas fa-trophy"></i> All Quizzes Completed!</h4>
+      <p id="scoreText">You scored X/6 — Great effort!</p>
+      <div class="mt-3">
+        <button class="btn btn-outline-primary me-2" onclick="retakeQuiz()">
+          <i class="fas fa-redo"></i> Retake
+        </button>
+        <a href="{% url 'dashboard' %}" class="btn btn-success">
+          <i class="fas fa-arrow-right"></i> Continue Learning
+        </a>
+      </div>
+    </div>
+  </div>
+
 </div>
 {% endblock %}
 

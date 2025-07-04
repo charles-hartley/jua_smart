@@ -4,7 +4,10 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -441,64 +444,58 @@ def submit_quiz(request):
         )
 
 # Keep all your other existing views (login, register, dashboard, etc.)
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
-
 def home(request):
     """Home page view"""
     return render(request, 'home.html')
 
 def user_login(request):
-    """Login view"""
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email_or_username = request.POST.get('email')
         password = request.POST.get('password')
-        
-        user = authenticate(request, username=username, password=password)
+
+        # Try both username and email
+        user = authenticate(request, username=email_or_username, password=password)
+        if user is None:
+            try:
+                user_obj = User.objects.get(email=email_or_username)
+                user = authenticate(request, username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                pass
+
         if user is not None:
             login(request, user)
-            messages.success(request, 'Login successful! Welcome to JuaSmart!')
-            return redirect('dashboard')
+            messages.success(request, 'Login successful! Welcome to JuaSmart.')
+            return redirect('dashboard')  # change this if your dashboard URL is different
         else:
-            messages.error(request, 'Invalid username or password.')
-    
+            messages.error(request, 'Invalid credentials. Please try again.')
+
     return render(request, 'login.html')
 
 def user_register(request):
-    """Registration view"""
     if request.method == 'POST':
-        username = request.POST.get('username')
+        full_name = request.POST.get('full_name')
         email = request.POST.get('email')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-        
+
         if password1 != password2:
             messages.error(request, 'Passwords do not match.')
             return render(request, 'register.html')
-        
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'Username already exists.')
+
+        if User.objects.filter(username=email).exists():
+            messages.error(request, 'A user with this email already exists.')
             return render(request, 'register.html')
-        
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already exists.')
-            return render(request, 'register.html')
-        
-        try:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password1
-            )
-            user.save()
-            messages.success(request, 'Registration successful! Please login.')
-            return redirect('login')
-        except Exception as e:
-            messages.error(request, 'Registration failed. Please try again.')
-    
+
+        user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password1,
+            first_name=full_name  # Or split into first/last if needed
+        )
+        login(request, user)
+        messages.success(request, 'Registration successful! You are now logged in.')
+        return redirect('dashboard')
+
     return render(request, 'register.html')
 
 def user_logout(request):
@@ -519,6 +516,19 @@ def lesson(request):
 def quiz(request):
     """Quiz view"""
     return render(request, 'quiz.html')
+
+def quiz_solar_basics(request):
+    """Solar Basics quiz page"""
+    return render(request, 'quiz_solar_basics.html')
+
+def quiz_energy_storage(request):
+    """Energy Storage quiz page"""
+    return render(request, 'quiz_energy_storage.html')
+
+def quiz_home_systems(request):
+    """Home Solar Systems quiz page"""
+    return render(request, 'quiz_home_systems.html')
+
 
 def save_kenya(request):
     """Save Kenya page view"""
